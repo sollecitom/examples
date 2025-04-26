@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "namespace": "acme.transaction.card",
+  "name": "CardAuthWasRequested",
+  "fields": [
+    {
+      "name": "card_number",
+      "type": "acme.common.protected.value.ProtectedString"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    },
+    {
+      "name": "tag",
+      "type": "string"
+    },
+    {
+      "name": "id",
+      "type": "acme.common.identity.Id"
+    }
+  ]
+}

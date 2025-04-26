@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "namespace": "acme.transaction",
+  "name": "Transaction",
+  "fields": [
+    {
+      "name": "envelope_type",
+      "type": "string"
+    },
+    {
+      "name": "envelope",
+      "type": [
+        "acme.transaction.card.CardTransaction",
+        "acme.transaction.trade.TradeTransaction"
+      ]
+    }
+  ]
+}

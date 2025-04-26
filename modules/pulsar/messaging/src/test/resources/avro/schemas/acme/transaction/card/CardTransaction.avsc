@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "namespace": "acme.transaction.card",
+  "name": "CardTransaction",
+  "fields": [
+    {
+      "name": "envelope_type",
+      "type": "string"
+    },
+    {
+      "name": "envelope",
+      "type": [
+        "CardAuthWasRequested",
+        "CardAuthWasProcessed"
+      ]
+    }
+  ]
+}
