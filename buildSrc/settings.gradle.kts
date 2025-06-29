@@ -1,7 +1,5 @@
 rootProject.name = "examples"
 
-includeBuild("../gradle-plugins")
-
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {

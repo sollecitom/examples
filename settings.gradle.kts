@@ -1,11 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-includeBuild(".")
-includeBuild("gradle-plugins")
-includeProject("swissknife")
-includeProject("acme-schema-catalogue")
-includeProject("pillar")
-
 rootProject.name = "examples"
 
 fun module(vararg pathSegments: String) = subProject(rootFolder = "modules", pathSegments = pathSegments)
@@ -14,7 +8,7 @@ fun subProject(rootFolder: String, vararg pathSegments: String, excludeRootFolde
 
     val projectName = pathSegments.last()
     val path = listOf(rootFolder) + pathSegments.dropLast(1)
-    val group = if (excludeRootFolderFromGroupName) path.minus(rootFolder).joinToString(separator = "-", prefix = "${rootProject.name}-") else path.joinToString(separator = "-", prefix = "${rootProject.name}-")
+    val group = if (excludeRootFolderFromGroupName) path.minus(rootFolder).joinToString(separator = "-") else path.joinToString(separator = "-", prefix = "${rootProject.name}-")
     val directory = path.joinToString(separator = "/", prefix = "./")
     val fullProjectName = "${if (group.isEmpty()) "" else "$group-"}$projectName"
 

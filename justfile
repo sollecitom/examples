@@ -1,21 +1,16 @@
 #!/usr/bin/env just --justfile
 
-addSubmodule submodule:
-    git submodule update --init --recursive {{submodule}}
-
 push:
-    git add . && git commit -m "WIP" && git push --recurse-submodules=on-demand origin main
+    git add . && git commit -m "WIP" && git push origin main
 
 pull:
-    git submodule update --recursive --remote
+    git pull
 
 build:
     ./gradlew build
-#    ./gradlew build jibDockerBuild containerBasedServiceTest
 
 rebuild:
-    ./gradlew --refresh-dependencies --rerun-tasks build
-#    ./gradlew --refresh-dependencies --rerun-tasks build jibDockerBuild containerBasedServiceTest
+    ./gradlew --refresh-dependencies --rerun-tasks clean build
 
 updateDependencies:
     ./gradlew versionCatalogUpdate

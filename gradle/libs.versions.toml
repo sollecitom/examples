@@ -41,6 +41,9 @@ liquibase-slf4j = "5.1.0"
 classgraph = "4.8.179"
 opentelemetry = "1.50.0"
 grafana-otel-lgtm = "1.21.0"
+sollecitom-gradle-plugins = "1.0.0-SNAPSHOT"
+sollecitom-swissknife = "1.0.0-SNAPSHOT"
+sollecitom-pillar = "1.0.0-SNAPSHOT"
 # plugins
 palantir-git-plugin = "3.2.0"
 version-catalog-report-plugin = "0.51.0"
@@ -51,6 +54,29 @@ jib-plugin = "3.4.4"
 # for buildSrc
 semver4j = { module = "com.vdurmont:semver4j", version.ref = "semver4j" }
 # for the build itself
+sollecitom-gradle-plugins = { module = "sollecitom.gradle-plugins:gradle-plugins", version.ref = "sollecitom-gradle-plugins" }
+swissknife-pulsar-avro-utils = { module = "sollecitom.swissknife:pulsar-avro-utils", version.ref = "sollecitom-swissknife" }
+swissknife-pulsar-avro-serialization = { module = "sollecitom.swissknife:pulsar-avro-serialization", version.ref = "sollecitom-swissknife" }
+swissknife-pulsar-messaging-adapter = { module = "sollecitom.swissknife:pulsar-messaging-adapter", version.ref = "sollecitom-swissknife" }
+swissknife-pulsar-messaging-test-utils = { module = "sollecitom.swissknife:pulsar-messaging-test-utils", version.ref = "sollecitom-swissknife" }
+swissknife-ddd-domain = { module = "sollecitom.swissknife:ddd-domain", version.ref = "sollecitom-swissknife" }
+swissknife-ddd-test-utils = { module = "sollecitom.swissknife:ddd-test-utils", version.ref = "sollecitom-swissknife" }
+swissknife-avro-schema-catalogue-test-utils = { module = "sollecitom.swissknife:avro-schema-catalogue-test-utils", version.ref = "sollecitom-swissknife" }
+swissknife-protected-value-factory-aes = { module = "sollecitom.swissknife:protected-value-factory-aes", version.ref = "sollecitom-swissknife" }
+swissknife-cryptography-implementation-bouncy-castle = { module = "sollecitom.swissknife:cryptography-implementation-bouncy-castle", version.ref = "sollecitom-swissknife" }
+swissknife-correlation-core-domain = { module = "sollecitom.swissknife:correlation-core-domain", version.ref = "sollecitom-swissknife" }
+swissknife-logging-standard-slf4j-configuration = { module = "sollecitom.swissknife:logging-standard-slf4j-configuration", version.ref = "sollecitom-swissknife" }
+swissknife-pulsar-json-serialization = { module = "sollecitom.swissknife:pulsar-json-serialization", version.ref = "sollecitom-swissknife" }
+swissknife-pulsar-test-utils = { module = "sollecitom.swissknife:pulsar-test-utils", version.ref = "sollecitom-swissknife" }
+pillar-json-serialization-ddd = { module = "sollecitom.pillar:json-serialization-ddd", version.ref = "sollecitom-pillar" }
+pillar-avro-serialization-ddd = { module = "sollecitom.pillar:avro-serialization-ddd", version.ref = "sollecitom-pillar" }
+pillar-avro-serialization-core = { module = "sollecitom.pillar:avro-serialization-core", version.ref = "sollecitom-pillar" }
+pillar-avro-serialization-correlation-core = { module = "sollecitom.pillar:avro-serialization-correlation-core", version.ref = "sollecitom-pillar" }
+pillar-avro-serialization-test-utils = { module = "sollecitom.pillar:avro-serialization-test-utils", version.ref = "sollecitom-pillar" }
+pillar-messaging-test-utils = { module = "sollecitom.pillar:messaging-test-utils", version.ref = "sollecitom-pillar" }
+pillar-messaging-conventions = { module = "sollecitom.pillar:messaging-conventions", version.ref = "sollecitom-pillar" }
+pillar-protected-value-domain = { module = "sollecitom.pillar:protected-value-domain", version.ref = "sollecitom-pillar" }
+pillar-protected-value-messaging-serialization-avro = { module = "sollecitom.pillar:protected-value-messaging-serialization-avro", version.ref = "sollecitom-pillar" }
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
 kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8" }
