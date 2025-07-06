@@ -9,7 +9,7 @@ import sollecitom.libs.swissknife.avro.schema.catalogue.domain.AvroSchemaCatalog
 import sollecitom.libs.swissknife.avro.schema.catalogue.domain.AvroSchemaContainer
 import sollecitom.libs.swissknife.core.domain.identity.Id
 import sollecitom.libs.swissknife.ddd.domain.Event
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import org.apache.avro.Schema
 
 object TransactionAvroSchemas : AvroSchemaCatalogueTemplate("acme.transaction") {

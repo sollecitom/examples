@@ -5,7 +5,7 @@ import sollecitom.libs.swissknife.core.domain.text.Name
 import sollecitom.libs.swissknife.core.domain.versioning.IntVersion
 import sollecitom.libs.swissknife.ddd.domain.Event
 import sollecitom.libs.swissknife.ddd.domain.Happening
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class TransactionEvent(val transaction: Transaction, override val id: Id, override val timestamp: Instant, override val context: Event.Context) : Event {
 

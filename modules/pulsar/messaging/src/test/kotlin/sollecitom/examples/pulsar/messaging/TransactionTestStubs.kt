@@ -17,7 +17,7 @@ import sollecitom.examples.pulsar.messaging.transaction.Transaction.CardTransact
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.CardTransaction.CardAuthWasRequested
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.TradeTransaction.TradeOrderWasRequested
 import sollecitom.examples.pulsar.messaging.transaction.TransactionEvent
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import sollecitom.libs.swissknife.core.utils.nextInt
 import kotlin.random.nextInt
 
