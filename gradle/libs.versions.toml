@@ -8,7 +8,8 @@ sollecitom-pillar = "1.0.0-SNAPSHOT"
 palantir-git-plugin = "4.0.0"
 
 [libraries]
-sollecitom-gradle-plugins = { module = "sollecitom.gradle-plugins:gradle-plugins", version.ref = "sollecitom-gradle-plugins" }
+sollecitom-gradle-plugins-base = { module = "sollecitom.gradle-plugins:base", version.ref = "sollecitom-gradle-plugins" }
+sollecitom-gradle-plugins-kotlin-jvm = { module = "sollecitom.gradle-plugins:kotlin-jvm", version.ref = "sollecitom-gradle-plugins" }
 swissknife-pulsar-avro-utils = { module = "sollecitom.swissknife:pulsar-avro-utils", version.ref = "sollecitom-swissknife" }
 swissknife-pulsar-avro-serialization = { module = "sollecitom.swissknife:pulsar-avro-serialization", version.ref = "sollecitom-swissknife" }
 swissknife-pulsar-messaging-adapter = { module = "sollecitom.swissknife:pulsar-messaging-adapter", version.ref = "sollecitom-swissknife" }
