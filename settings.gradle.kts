@@ -24,4 +24,4 @@ fun includeProject(name: String) {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 module("pulsar", "messaging")
-
+module("exercises", "event-framework")
