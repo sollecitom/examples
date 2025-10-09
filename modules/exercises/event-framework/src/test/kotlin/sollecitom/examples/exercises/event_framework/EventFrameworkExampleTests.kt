@@ -10,7 +10,7 @@ import sollecitom.libs.swissknife.core.utils.CoreDataGenerator
 import sollecitom.libs.swissknife.test.utils.execution.utils.test
 
 @TestInstance(PER_CLASS)
-class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerator.testProvider {
+private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Test
     fun `whatever who knows`() = test { // TODO continue
