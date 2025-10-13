@@ -19,7 +19,7 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
         val events = eventFramework()
         val streamReference = EventStream.Reference(id = newId.ulid.monotonic().stringValue, eventClass = TestEvent::class)
 
-        val stream = events.streamWithReference(streamReference)
+        val stream = events.streams[streamReference]
 
         assertThat(true).isTrue()
     }
@@ -37,16 +37,21 @@ data class TestEvent(val value: String) : Event
 
 class InMemoryEventFramework : EventFramework {
 
-    private val streams = mutableMapOf<String, Stream<*>>()
+    private val streamsMap = mutableMapOf<String, Stream<*>>()
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <EVENT : Event> streamWithId(id: String, eventClass: KClass<EVENT>): EventStream<EVENT> = synchronized(id) {
+    override val streams: EventStreamOperations = Streams()
 
-        val stream = streams.getOrPut(id) { Stream(id, eventClass) } as Stream<EVENT>
-        if (stream.eventClass !== eventClass) {
-            throw IllegalArgumentException("Stream with ID '$id' already exist, but its eventClass '${stream.eventClass}' is different from the one requested '$eventClass'")
+    private inner class Streams : EventStreamOperations {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <EVENT : Event> withId(id: String, eventClass: KClass<EVENT>): EventStream<EVENT> {
+
+            val stream = streamsMap.getOrPut(id) { Stream(id, eventClass) } as Stream<EVENT>
+            if (stream.eventClass !== eventClass) {
+                throw IllegalArgumentException("Stream with ID '$id' already exist, but its eventClass '${stream.eventClass}' is different from the one requested '$eventClass'")
+            }
+            return stream
         }
-        stream
     }
 
     private class Stream<EVENT : Event>(private val id: String, val eventClass: KClass<EVENT>) : EventStream<EVENT> {
@@ -56,7 +61,12 @@ class InMemoryEventFramework : EventFramework {
 
 interface EventFramework {
 
-    fun <EVENT : Event> streamWithId(id: String, eventClass: KClass<EVENT>): EventStream<EVENT>
+    val streams: EventStreamOperations
+}
+
+interface EventStreamOperations {
+
+    fun <EVENT : Event> withId(id: String, eventClass: KClass<EVENT>): EventStream<EVENT>
 }
 
 interface EventStream<EVENT : Event> {
@@ -64,4 +74,4 @@ interface EventStream<EVENT : Event> {
     data class Reference<EVENT : Event>(val id: String, val eventClass: KClass<EVENT>)
 }
 
-fun <EVENT : Event> EventFramework.streamWithReference(reference: EventStream.Reference<EVENT>) = streamWithId(reference.id, reference.eventClass)
+operator fun <EVENT : Event> EventStreamOperations.get(reference: EventStream.Reference<EVENT>) = withId(reference.id, reference.eventClass)
