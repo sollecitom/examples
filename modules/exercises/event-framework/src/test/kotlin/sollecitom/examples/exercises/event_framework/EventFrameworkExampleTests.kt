@@ -17,7 +17,7 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
     fun `publishing events to an event stream for the same key`() = test {
 
         val events = eventFramework()
-        val streamReference = streamReference<TestEvent>()
+        val streamReference = uniqueStreamReference<TestEvent>()
         val accountId = "123"
         val event1 = TestEvent(accountId = accountId, value = "1")
         val event2 = TestEvent(accountId = accountId, value = "2")
@@ -30,7 +30,9 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
         assertThat(event2Offset.value).isEqualTo(1L)
     }
 
-    private inline fun <reified EVENT : Event> streamReference(id: String = newId.ulid.monotonic().stringValue): EventStream.Reference<EVENT> = EventStream.Reference(id = id, eventClass = EVENT::class)
+    private inline fun <reified EVENT : Event> uniqueStreamReference(): EventStream.Reference<EVENT> = streamReference(id = newId.ulid.monotonic().stringValue)
+
+    private inline fun <reified EVENT : Event> streamReference(id: String): EventStream.Reference<EVENT> = EventStream.Reference(id = id, eventClass = EVENT::class)
 
     private fun eventFramework(): EventFramework {
         return InMemoryEventFramework()
