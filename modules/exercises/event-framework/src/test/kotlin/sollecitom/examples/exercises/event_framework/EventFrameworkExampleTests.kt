@@ -21,7 +21,6 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
         val accountId = "123"
         val event1 = TestEvent(accountId = accountId, value = "1")
         val event2 = TestEvent(accountId = accountId, value = "2")
-
         val stream = events.streams[streamReference]
 
         val (event1Offset) = stream.forKey(accountId).append(event1)
