@@ -17,12 +17,14 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
     fun `publishing events to an event stream`() = test {
 
         val events = eventFramework()
-        val streamReference = EventStream.Reference(id = newId.ulid.monotonic().stringValue, eventClass = TestEvent::class)
+        val streamReference = streamReference<TestEvent>()
 
         val stream = events.streams[streamReference]
 
         assertThat(true).isTrue()
     }
+
+    private inline fun <reified EVENT : Event> streamReference(id: String = newId.ulid.monotonic().stringValue): EventStream.Reference<EVENT> = EventStream.Reference(id = id, eventClass = EVENT::class)
 
     private fun eventFramework(): EventFramework {
         return InMemoryEventFramework()
