@@ -40,15 +40,18 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
         val event1 = TestEvent(accountId = accountId1, value = "1")
         val event2 = TestEvent(accountId = accountId1, value = "2")
         val event3 = TestEvent(accountId = accountId2, value = "1")
+        val event4 = TestEvent(accountId = accountId1, value = "3")
         val stream = events.streams[streamReference]
 
         val (event1Offset) = stream.forKey(accountId1).append(event1)
         val (event2Offset) = stream.forKey(accountId1).append(event2)
         val (event3Offset) = stream.forKey(accountId2).append(event3)
+        val (event4Offset) = stream.forKey(accountId1).append(event4)
 
         assertThat(event1Offset.value).isEqualTo(0L)
         assertThat(event2Offset.value).isEqualTo(1L)
         assertThat(event3Offset.value).isEqualTo(0L)
+        assertThat(event4Offset.value).isEqualTo(2L)
     }
 
     private inline fun <reified EVENT : Event> uniqueStreamReference(): EventStream.Reference<EVENT> = streamReference(id = newId.ulid.monotonic().stringValue)
