@@ -17,7 +17,7 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
     // a player attempts to knock a door down
 
     @Test
-    fun `a Dungeons & Dragons player attempts to knock a door down`() = test { // TODO refactor
+    fun `a Dungeons & Dragons player knocks a door down`() = test { // TODO refactor
 
         val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
         val dAndDPlayer = newDungeonsAndDragonsPlayer(strength = 14)
