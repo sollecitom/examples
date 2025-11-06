@@ -54,11 +54,9 @@ class DungeonsAndDragonsPlayerImplementation(private val strength: Int) : Dungeo
         require(strength >= 0) { "Strength must be greater or equal to zero" }
     }
 
-    override fun attempt(challenge: DungeonsAndDragonsChallenge, dice: D20): DungeonsAndDragonsChallenge.Outcome {
+    override fun attempt(challenge: DungeonsAndDragonsChallenge, dice: D20) = when (challenge) {
 
-        return when (challenge) {
-            is DungeonsAndDragonsAttributeChallenge -> attemptAttributeChallenge(challenge, dice)
-        }
+        is DungeonsAndDragonsAttributeChallenge -> attemptAttributeChallenge(challenge, dice)
     }
 
     private fun attemptAttributeChallenge(challenge: DungeonsAndDragonsAttributeChallenge, dice: D20): DungeonsAndDragonsChallenge.Outcome {
@@ -70,27 +68,25 @@ class DungeonsAndDragonsPlayerImplementation(private val strength: Int) : Dungeo
         if (baseResult == 20) {
             return DungeonsAndDragonsChallenge.Outcome.CriticalSuccess
         }
-        val modifier = challenge.modifier()
+        val modifier = challenge.attribute.modifier()
         val result = baseResult + modifier
         return if (result >= challenge.difficultyClass) DungeonsAndDragonsChallenge.Outcome.Success else DungeonsAndDragonsChallenge.Outcome.Failure
     }
 
-    private fun DungeonsAndDragonsAttributeChallenge.modifier(): Int = modifierForAttribute(attribute = attribute)
+    private fun DungeonsAndDragonsAttribute.modifier(): Int {
 
-    private fun modifierForAttribute(attribute: DungeonsAndDragonsAttribute): Int {
-
-        val score = when (attribute) {
-            DungeonsAndDragonsAttribute.STRENGTH -> this.strength
+        val score = when (this) {
+            DungeonsAndDragonsAttribute.STRENGTH -> strength
             DungeonsAndDragonsAttribute.DEXTERITY -> TODO("not implemented yet")
             DungeonsAndDragonsAttribute.CONSTITUTION -> TODO("not implemented yet")
             DungeonsAndDragonsAttribute.INTELLIGENCE -> TODO("not implemented yet")
             DungeonsAndDragonsAttribute.WISDOM -> TODO("not implemented yet")
             DungeonsAndDragonsAttribute.CHARISMA -> TODO("not implemented yet")
         }
-        return attributeModifier(score)
+        return score.modifier()
     }
 
-    private fun attributeModifier(score: Int): Int = (score - 10) / 2
+    private fun Int.modifier(): Int = (this - 10) / 2
 }
 
 private fun Assert<DungeonsAndDragonsChallenge.Outcome>.succeeded() = given { outcome ->
