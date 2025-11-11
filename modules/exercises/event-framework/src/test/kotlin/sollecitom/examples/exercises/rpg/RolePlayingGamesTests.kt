@@ -19,7 +19,7 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
     // fumble fails every DC
 
     @Test
-    fun `a Dungeons & Dragons player knocks a door down`() = test { // TODO refactor
+    fun `a Dungeons & Dragons player knocks a door down`() = test {
 
         val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
         val player = newDungeonsAndDragonsPlayer(strength = 14)
@@ -32,11 +32,11 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
 
     private fun loadedD20(result: Int): D20 = LoadedD20(result)
 
-    private fun newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragonsChallenge = newDungeonsAndDragonsStrengthCheck(difficultyClass)
+    private fun newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newDungeonsAndDragonsStrengthCheck(difficultyClass)
 
-    private fun newDungeonsAndDragonsStrengthCheck(difficultyClass: Int): DungeonsAndDragonsChallenge = DungeonsAndDragonsAttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragonsAttribute.STRENGTH)
+    private fun newDungeonsAndDragonsStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragons.Attribute.STRENGTH)
 
-    private fun newDungeonsAndDragonsPlayer(strength: Int = 10): DungeonsAndDragonsPlayer {
+    private fun newDungeonsAndDragonsPlayer(strength: Int = 10): DungeonsAndDragons.Player {
 
         return DungeonsAndDragonsPlayerImplementation(strength = strength)
     }
@@ -52,40 +52,40 @@ data class LoadedD20(private val result: Int) : D20 {
     override fun roll() = result
 }
 
-class DungeonsAndDragonsPlayerImplementation(private val strength: Int) : DungeonsAndDragonsPlayer {
+class DungeonsAndDragonsPlayerImplementation(private val strength: Int) : DungeonsAndDragons.Player {
 
     init {
         require(strength >= 0) { "Strength must be greater or equal to zero" }
     }
 
-    override fun attempt(challenge: DungeonsAndDragonsChallenge, dice: D20) = when (challenge) {
+    override fun attempt(challenge: DungeonsAndDragons.Challenge, dice: D20) = when (challenge) {
 
-        is DungeonsAndDragonsAttributeChallenge -> attemptAttributeChallenge(challenge, dice)
+        is DungeonsAndDragons.AttributeChallenge -> attemptAttributeChallenge(challenge, dice)
     }
 
-    private fun attemptAttributeChallenge(challenge: DungeonsAndDragonsAttributeChallenge, dice: D20): DungeonsAndDragonsChallenge.Outcome {
+    private fun attemptAttributeChallenge(challenge: DungeonsAndDragons.AttributeChallenge, dice: D20): DungeonsAndDragons.Challenge.Outcome {
 
         val baseResult = dice.roll()
         if (baseResult == 1) {
-            return DungeonsAndDragonsChallenge.Outcome.Fumble
+            return DungeonsAndDragons.Challenge.Outcome.Fumble
         }
         if (baseResult == 20) {
-            return DungeonsAndDragonsChallenge.Outcome.CriticalSuccess
+            return DungeonsAndDragons.Challenge.Outcome.CriticalSuccess
         }
         val modifier = challenge.attribute.modifier()
         val result = baseResult + modifier
-        return if (result >= challenge.difficultyClass) DungeonsAndDragonsChallenge.Outcome.Success else DungeonsAndDragonsChallenge.Outcome.Failure
+        return if (result >= challenge.difficultyClass) DungeonsAndDragons.Challenge.Outcome.Success else DungeonsAndDragons.Challenge.Outcome.Failure
     }
 
-    private fun DungeonsAndDragonsAttribute.modifier(): Int {
+    private fun DungeonsAndDragons.Attribute.modifier(): Int {
 
         val score = when (this) {
-            DungeonsAndDragonsAttribute.STRENGTH -> strength
-            DungeonsAndDragonsAttribute.DEXTERITY -> TODO("not implemented yet")
-            DungeonsAndDragonsAttribute.CONSTITUTION -> TODO("not implemented yet")
-            DungeonsAndDragonsAttribute.INTELLIGENCE -> TODO("not implemented yet")
-            DungeonsAndDragonsAttribute.WISDOM -> TODO("not implemented yet")
-            DungeonsAndDragonsAttribute.CHARISMA -> TODO("not implemented yet")
+            DungeonsAndDragons.Attribute.STRENGTH -> strength
+            DungeonsAndDragons.Attribute.DEXTERITY -> TODO("not implemented yet")
+            DungeonsAndDragons.Attribute.CONSTITUTION -> TODO("not implemented yet")
+            DungeonsAndDragons.Attribute.INTELLIGENCE -> TODO("not implemented yet")
+            DungeonsAndDragons.Attribute.WISDOM -> TODO("not implemented yet")
+            DungeonsAndDragons.Attribute.CHARISMA -> TODO("not implemented yet")
         }
         return score.modifier()
     }
@@ -93,32 +93,35 @@ class DungeonsAndDragonsPlayerImplementation(private val strength: Int) : Dungeo
     private fun Int.modifier(): Int = (this - 10) / 2
 }
 
-private fun Assert<DungeonsAndDragonsChallenge.Outcome>.succeeded() = given { outcome ->
+private fun Assert<DungeonsAndDragons.Challenge.Outcome>.succeeded() = given { outcome ->
 
-    assertThat(outcome).isEqualTo(DungeonsAndDragonsChallenge.Outcome.Success)
+    assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.Success)
 }
 
-data class DungeonsAndDragonsAttributeChallenge(override val difficultyClass: Int, val attribute: DungeonsAndDragonsAttribute) : DungeonsAndDragonsChallenge
+object DungeonsAndDragons {
 
-sealed interface DungeonsAndDragonsChallenge {
+    interface Player {
 
-    val difficultyClass: Int
-
-    sealed interface Outcome {
-
-        object Fumble : Outcome
-        object Failure : Outcome
-        object Success : Outcome
-        object CriticalSuccess : Outcome
+        fun attempt(challenge: Challenge, dice: D20): Challenge.Outcome
     }
-}
 
-enum class DungeonsAndDragonsAttribute {
+    enum class Attribute {
 
-    STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA
-}
+        STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA
+    }
 
-interface DungeonsAndDragonsPlayer {
+    data class AttributeChallenge(override val difficultyClass: Int, val attribute: Attribute) : Challenge
 
-    fun attempt(challenge: DungeonsAndDragonsChallenge, dice: D20): DungeonsAndDragonsChallenge.Outcome
+    sealed interface Challenge {
+
+        val difficultyClass: Int
+
+        sealed interface Outcome {
+
+            object Fumble : Outcome
+            object Failure : Outcome
+            object Success : Outcome
+            object CriticalSuccess : Outcome
+        }
+    }
 }
