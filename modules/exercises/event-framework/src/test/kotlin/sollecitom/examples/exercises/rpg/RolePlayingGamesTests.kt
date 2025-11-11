@@ -28,7 +28,7 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
             val player = newPlayer(strength = 14)
             val dice = loadedD20(result = 11)
 
-            val outcome = player.attempt(challenge, dice)
+            val outcome = player.attempt(challenge, dice) // 11 + 2 = 13 => success
 
             assertThat(outcome).succeeded()
         }
@@ -40,7 +40,7 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
             val player = newPlayer(strength = 14)
             val dice = loadedD20(result = 10)
 
-            val outcome = player.attempt(challenge, dice)
+            val outcome = player.attempt(challenge, dice) // 10 + 2 = 12 => failure
 
             assertThat(outcome).failed()
         }
