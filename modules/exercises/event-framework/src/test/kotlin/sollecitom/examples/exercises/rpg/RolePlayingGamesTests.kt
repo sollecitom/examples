@@ -21,8 +21,8 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
     @Test
     fun `a Dungeons & Dragons player knocks a door down`() = test {
 
-        val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
-        val player = newDungeonsAndDragonsPlayer(strength = 14)
+        val challenge = DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass = 13)
+        val player = DungeonsAndDragons.newPlayer(strength = 14)
         val dice = loadedD20(result = 11)
 
         val outcome = player.attempt(challenge, dice)
@@ -32,11 +32,11 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
 
     private fun loadedD20(result: Int): D20 = LoadedD20(result)
 
-    private fun newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newDungeonsAndDragonsStrengthCheck(difficultyClass)
+    private fun DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newDungeonsAndDragonsStrengthCheck(difficultyClass)
 
     private fun newDungeonsAndDragonsStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragons.Attribute.STRENGTH)
 
-    private fun newDungeonsAndDragonsPlayer(strength: Int = 10): DungeonsAndDragons.Player {
+    private fun DungeonsAndDragons.newPlayer(strength: Int = 10): DungeonsAndDragons.Player {
 
         return DungeonsAndDragonsPlayerImplementation(strength = strength)
     }
