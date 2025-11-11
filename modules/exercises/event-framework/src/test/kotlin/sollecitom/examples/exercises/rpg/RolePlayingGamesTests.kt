@@ -19,15 +19,22 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
     // fumble fails every DC
 
     @Test
-    fun `a Dungeons & Dragons player knocks a door down`() = test {
+    fun `a Dungeons & Dragons player knocks a door down`() = testWithGame(DungeonsAndDragons) {
 
-        val challenge = DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass = 13)
-        val player = DungeonsAndDragons.newPlayer(strength = 14)
+        val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
+        val player = newPlayer(strength = 14)
         val dice = loadedD20(result = 11)
 
         val outcome = player.attempt(challenge, dice)
 
         assertThat(outcome).succeeded()
+    }
+
+    private fun <GAME : Any> testWithGame(game: GAME, action: suspend GAME.() -> Unit) = test {
+
+        with(game) {
+            action()
+        }
     }
 
     private fun loadedD20(result: Int): D20 = LoadedD20(result)
