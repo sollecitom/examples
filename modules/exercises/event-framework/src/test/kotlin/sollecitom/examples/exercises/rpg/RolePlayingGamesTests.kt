@@ -3,6 +3,7 @@ package sollecitom.examples.exercises.rpg
 import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -18,16 +19,31 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
     // critical success beats every DC
     // fumble fails every DC
 
-    @Test
-    fun `a Dungeons & Dragons player knocks a door down`() = testWithGame(DungeonsAndDragons) {
+    @Nested
+    inner class DungeonsAndDragonsTests {
 
-        val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
-        val player = newPlayer(strength = 14)
-        val dice = loadedD20(result = 11)
+        @Test
+        fun `a player knocks a door down`() = testWithGame(DungeonsAndDragons) {
 
-        val outcome = player.attempt(challenge, dice)
+            val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
+            val player = newPlayer(strength = 14)
+            val dice = loadedD20(result = 11)
 
-        assertThat(outcome).succeeded()
+            val outcome = player.attempt(challenge, dice)
+
+            assertThat(outcome).succeeded()
+        }
+
+        private fun DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newStrengthCheck(difficultyClass)
+
+        private fun DungeonsAndDragons.newStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragons.Attribute.STRENGTH)
+
+        private fun DungeonsAndDragons.newPlayer(strength: Int = 10): DungeonsAndDragons.Player = DungeonsAndDragonsPlayerImplementation(strength = strength)
+
+        private fun Assert<DungeonsAndDragons.Challenge.Outcome>.succeeded() = given { outcome ->
+
+            assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.Success)
+        }
     }
 
     private fun <GAME : Any> testWithGame(game: GAME, action: suspend GAME.() -> Unit) = test {
@@ -38,15 +54,6 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
     }
 
     private fun loadedD20(result: Int): D20 = LoadedD20(result)
-
-    private fun DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newDungeonsAndDragonsStrengthCheck(difficultyClass)
-
-    private fun newDungeonsAndDragonsStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragons.Attribute.STRENGTH)
-
-    private fun DungeonsAndDragons.newPlayer(strength: Int = 10): DungeonsAndDragons.Player {
-
-        return DungeonsAndDragonsPlayerImplementation(strength = strength)
-    }
 }
 
 interface D20 {
@@ -98,11 +105,6 @@ class DungeonsAndDragonsPlayerImplementation(private val strength: Int) : Dungeo
     }
 
     private fun Int.modifier(): Int = (this - 10) / 2
-}
-
-private fun Assert<DungeonsAndDragons.Challenge.Outcome>.succeeded() = given { outcome ->
-
-    assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.Success)
 }
 
 object DungeonsAndDragons {
