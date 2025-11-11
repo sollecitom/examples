@@ -14,7 +14,9 @@ import sollecitom.libs.swissknife.test.utils.execution.utils.test
 private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     // Tests To-Do List
-    // a player attempts to knock a door down
+    // a player fails to knock a door down
+    // critical success beats every DC
+    // fumble fails every DC
 
     @Test
     fun `a Dungeons & Dragons player knocks a door down`() = test { // TODO refactor
