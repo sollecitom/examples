@@ -22,10 +22,10 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
     fun `a Dungeons & Dragons player knocks a door down`() = test { // TODO refactor
 
         val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
-        val dAndDPlayer = newDungeonsAndDragonsPlayer(strength = 14)
+        val player = newDungeonsAndDragonsPlayer(strength = 14)
         val dice = loadedD20(result = 11)
 
-        val outcome = dAndDPlayer.attempt(challenge, dice)
+        val outcome = player.attempt(challenge, dice)
 
         assertThat(outcome).succeeded()
     }
