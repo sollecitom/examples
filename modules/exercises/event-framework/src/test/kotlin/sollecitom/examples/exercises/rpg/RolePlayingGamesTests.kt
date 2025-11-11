@@ -15,7 +15,6 @@ import sollecitom.libs.swissknife.test.utils.execution.utils.test
 private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     // Tests To-Do List
-    // a player fails to knock a door down
     // critical success beats every DC
     // fumble fails every DC
 
@@ -34,6 +33,18 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
             assertThat(outcome).succeeded()
         }
 
+        @Test
+        fun `a player fails to knock a door down`() = testWithGame(DungeonsAndDragons) {
+
+            val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
+            val player = newPlayer(strength = 14)
+            val dice = loadedD20(result = 10)
+
+            val outcome = player.attempt(challenge, dice)
+
+            assertThat(outcome).failed()
+        }
+
         private fun DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newStrengthCheck(difficultyClass)
 
         private fun DungeonsAndDragons.newStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragons.Attribute.STRENGTH)
@@ -43,6 +54,11 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
         private fun Assert<DungeonsAndDragons.Challenge.Outcome>.succeeded() = given { outcome ->
 
             assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.Success)
+        }
+
+        private fun Assert<DungeonsAndDragons.Challenge.Outcome>.failed() = given { outcome ->
+
+            assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.Failure)
         }
     }
 
