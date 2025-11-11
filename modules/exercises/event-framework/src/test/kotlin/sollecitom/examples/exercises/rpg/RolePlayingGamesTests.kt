@@ -23,12 +23,14 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
 
         val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
         val dAndDPlayer = newDungeonsAndDragonsPlayer(strength = 14)
-        val dice = LoadedD20(result = 11)
+        val dice = loadedD20(result = 11)
 
         val outcome = dAndDPlayer.attempt(challenge, dice)
 
         assertThat(outcome).succeeded()
     }
+
+    private fun loadedD20(result: Int): D20 = LoadedD20(result)
 
     private fun newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragonsChallenge = newDungeonsAndDragonsStrengthCheck(difficultyClass)
 
