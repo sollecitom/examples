@@ -15,7 +15,6 @@ import sollecitom.libs.swissknife.test.utils.execution.utils.test
 private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     // Tests To-Do List
-    // critical success beats every DC
     // fumble fails every DC
 
     @Nested
@@ -28,7 +27,7 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
             val player = newPlayer(strength = 14)
             val dice = loadedD20(result = 11)
 
-            val outcome = player.attempt(challenge, dice) // 11 + 2 = 13 => success
+            val outcome = player.attempt(challenge, dice) // 11 + 2 = 13 <= 13 => success
 
             assertThat(outcome).succeeded()
         }
@@ -40,9 +39,21 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
             val player = newPlayer(strength = 14)
             val dice = loadedD20(result = 10)
 
-            val outcome = player.attempt(challenge, dice) // 10 + 2 = 12 => failure
+            val outcome = player.attempt(challenge, dice) // 10 + 2 = 12 < 13 => failure
 
             assertThat(outcome).failed()
+        }
+
+        @Test
+        fun `a player critically succeeds in knocking a door down`() = testWithGame(DungeonsAndDragons) {
+
+            val challenge = newKnockDoorDownChallenge(difficultyClass = 35)
+            val player = newPlayer(strength = 14)
+            val dice = loadedD20(result = 20)
+
+            val outcome = player.attempt(challenge, dice) // 20 + 2 = 22 < 35 => critical success
+
+            assertThat(outcome).criticallySucceeded()
         }
 
         private fun DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newStrengthCheck(difficultyClass)
@@ -59,6 +70,11 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
         private fun Assert<DungeonsAndDragons.Challenge.Outcome>.failed() = given { outcome ->
 
             assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.Failure)
+        }
+
+        private fun Assert<DungeonsAndDragons.Challenge.Outcome>.criticallySucceeded() = given { outcome ->
+
+            assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.CriticalSuccess)
         }
     }
 
