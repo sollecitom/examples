@@ -15,7 +15,9 @@ import sollecitom.libs.swissknife.test.utils.execution.utils.test
 private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     // Tests To-Do List
-    // fumble fails every DC
+    // attribute-enhancing items
+    // temporary attribute enhancing items
+    // skill checks
 
     @Nested
     inner class DungeonsAndDragonsTests {
@@ -56,6 +58,18 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
             assertThat(outcome).criticallySucceeded()
         }
 
+        @Test
+        fun `a player fumbles in knocking a door down`() = testWithGame(DungeonsAndDragons) {
+
+            val challenge = newKnockDoorDownChallenge(difficultyClass = 5)
+            val player = newPlayer(strength = 20)
+            val dice = loadedD20(result = 1)
+
+            val outcome = player.attempt(challenge, dice) // 1 + 5 = 6 >= 5 => fumble
+
+            assertThat(outcome).fumbled()
+        }
+
         private fun DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newStrengthCheck(difficultyClass)
 
         private fun DungeonsAndDragons.newStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragons.Attribute.STRENGTH)
@@ -75,6 +89,11 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
         private fun Assert<DungeonsAndDragons.Challenge.Outcome>.criticallySucceeded() = given { outcome ->
 
             assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.CriticalSuccess)
+        }
+
+        private fun Assert<DungeonsAndDragons.Challenge.Outcome>.fumbled() = given { outcome ->
+
+            assertThat(outcome).isEqualTo(DungeonsAndDragons.Challenge.Outcome.Fumble)
         }
     }
 
@@ -159,10 +178,10 @@ object DungeonsAndDragons {
 
         sealed interface Outcome {
 
-            object Fumble : Outcome
-            object Failure : Outcome
-            object Success : Outcome
-            object CriticalSuccess : Outcome
+            data object Fumble : Outcome
+            data object Failure : Outcome
+            data object Success : Outcome
+            data object CriticalSuccess : Outcome
         }
     }
 }
