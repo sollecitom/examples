@@ -73,9 +73,8 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
         fun `a player knocks a door down with help from a magical item`() = testWithGame(DungeonsAndDragons) {
 
             val challenge = newKnockDoorDownChallenge(difficultyClass = 23)
-            val player = newPlayer(strength = 16)
             val giantStrengthGauntlets = newStrengthEnhancingMagicalItem(bonus = 6)
-            player.equip(giantStrengthGauntlets)
+            val player = newPlayer(strength = 16, equippedItems = setOf(giantStrengthGauntlets))
 
             val dice = loadedD20(result = 17)
             val outcome = player.attempt(challenge, dice) // 17 + 3 + 3 (from +6 str bonus) = 23 <= 23 => success
@@ -87,7 +86,7 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
 
         private fun DungeonsAndDragons.newStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragons.Attribute.STRENGTH)
 
-        private fun DungeonsAndDragons.newPlayer(strength: Int = 10): DungeonsAndDragons.Player = DungeonsAndDragonsPlayerImplementation(strength = strength)
+        private fun DungeonsAndDragons.newPlayer(strength: Int = 10, equippedItems: Set<DungeonsAndDragons.Wearable> = emptySet()): DungeonsAndDragons.Player = DungeonsAndDragonsPlayerImplementation(strength = strength, equippedItems = equippedItems)
 
         private fun DungeonsAndDragons.newStrengthEnhancingMagicalItem(bonus: Int): DungeonsAndDragons.Wearable = DungeonsAndDragonsAttributeEnhancingWearable(strength = bonus)
 
@@ -144,9 +143,7 @@ data class LoadedD20(private val result: Int) : D20 {
     override fun roll() = result
 }
 
-class DungeonsAndDragonsPlayerImplementation(private val strength: Int) : DungeonsAndDragons.Player {
-
-    private val equippedItems = mutableSetOf<DungeonsAndDragons.Wearable>()
+class DungeonsAndDragonsPlayerImplementation(private val strength: Int, private val equippedItems: Set<DungeonsAndDragons.Wearable>) : DungeonsAndDragons.Player {
 
     init {
         require(strength >= 0) { "Strength must be greater or equal to zero" }
@@ -155,11 +152,6 @@ class DungeonsAndDragonsPlayerImplementation(private val strength: Int) : Dungeo
     override fun attempt(challenge: DungeonsAndDragons.Challenge, dice: D20) = when (challenge) {
 
         is DungeonsAndDragons.AttributeChallenge -> attemptAttributeChallenge(challenge, dice)
-    }
-
-    override fun equip(wearable: DungeonsAndDragons.Wearable) {
-
-        equippedItems += wearable
     }
 
     private fun attemptAttributeChallenge(challenge: DungeonsAndDragons.AttributeChallenge, dice: D20): DungeonsAndDragons.Challenge.Outcome {
@@ -207,8 +199,6 @@ object DungeonsAndDragons {
     interface Player {
 
         fun attempt(challenge: Challenge, dice: D20): Challenge.Outcome
-
-        fun equip(wearable: Wearable)
     }
 
     enum class Attribute {
