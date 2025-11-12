@@ -17,7 +17,6 @@ import sollecitom.libs.swissknife.test.utils.execution.utils.test
 private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     // Tests To-Do List
-    // temporary attribute enhancing effects
     // skill checks
 
     @Nested
