@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import sollecitom.examples.exercises.rpg.DungeonsAndDragons.Attribute
 import sollecitom.libs.swissknife.core.test.utils.testProvider
 import sollecitom.libs.swissknife.core.utils.CoreDataGenerator
 import sollecitom.libs.swissknife.test.utils.execution.utils.test
@@ -84,9 +85,25 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
 
         private fun DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newStrengthCheck(difficultyClass)
 
-        private fun DungeonsAndDragons.newStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = DungeonsAndDragons.Attribute.STRENGTH)
+        private fun DungeonsAndDragons.newStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = Attribute.STRENGTH)
 
-        private fun DungeonsAndDragons.newPlayer(strength: Int = 10, equippedItems: Set<DungeonsAndDragons.Wearable> = emptySet()): DungeonsAndDragons.Player = DungeonsAndDragonsPlayerImplementation(strength = strength, equippedItems = equippedItems)
+        private fun DungeonsAndDragons.newPlayer(
+            strength: Int = 10,
+            dexterity: Int = 10,
+            constitution: Int = 10,
+            intelligence: Int = 10,
+            wisdom: Int = 10,
+            charisma: Int = 10,
+            equippedItems: Set<DungeonsAndDragons.Wearable> = emptySet()
+        ): DungeonsAndDragons.Player = DungeonsAndDragonsPlayerImplementation(
+            strength = strength,
+            dexterity = dexterity,
+            constitution = constitution,
+            intelligence = intelligence,
+            wisdom = wisdom,
+            charisma = charisma,
+            equippedItems = equippedItems
+        )
 
         private fun DungeonsAndDragons.newStrengthEnhancingMagicalItem(bonus: Int): DungeonsAndDragons.Wearable = DungeonsAndDragonsAttributeEnhancingWearable(strength = bonus)
 
@@ -123,13 +140,13 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
 
 class DungeonsAndDragonsAttributeEnhancingWearable(private val strength: Int = 0, private val dexterity: Int = 0, private val constitution: Int = 0, private val intelligence: Int = 0, private val wisdom: Int = 0, private val charisma: Int = 0) : DungeonsAndDragons.Wearable.AttributeEnhancing {
 
-    override fun bonusToAttribute(attribute: DungeonsAndDragons.Attribute) = when (attribute) {
-        DungeonsAndDragons.Attribute.STRENGTH -> strength
-        DungeonsAndDragons.Attribute.DEXTERITY -> dexterity
-        DungeonsAndDragons.Attribute.CONSTITUTION -> constitution
-        DungeonsAndDragons.Attribute.INTELLIGENCE -> intelligence
-        DungeonsAndDragons.Attribute.WISDOM -> wisdom
-        DungeonsAndDragons.Attribute.CHARISMA -> charisma
+    override fun bonusToAttribute(attribute: Attribute) = when (attribute) {
+        Attribute.STRENGTH -> strength
+        Attribute.DEXTERITY -> dexterity
+        Attribute.CONSTITUTION -> constitution
+        Attribute.INTELLIGENCE -> intelligence
+        Attribute.WISDOM -> wisdom
+        Attribute.CHARISMA -> charisma
     }
 }
 
@@ -143,10 +160,27 @@ data class LoadedD20(private val result: Int) : D20 {
     override fun roll() = result
 }
 
-class DungeonsAndDragonsPlayerImplementation(private val strength: Int, private val equippedItems: Set<DungeonsAndDragons.Wearable>) : DungeonsAndDragons.Player {
+class DungeonsAndDragonsPlayerImplementation(
+    strength: Int,
+    dexterity: Int,
+    constitution: Int,
+    intelligence: Int,
+    wisdom: Int,
+    charisma: Int,
+    private val equippedItems: Set<DungeonsAndDragons.Wearable>
+) : DungeonsAndDragons.Player {
+
+    private val attributes = mapOf(
+        Attribute.STRENGTH to strength,
+        Attribute.DEXTERITY to dexterity,
+        Attribute.CONSTITUTION to constitution,
+        Attribute.INTELLIGENCE to intelligence,
+        Attribute.WISDOM to wisdom,
+        Attribute.CHARISMA to charisma
+    )
 
     init {
-        require(strength >= 0) { "Strength must be greater or equal to zero" }
+        attributes.forEach { (attribute, score) -> require(score >= 0) { "Attribute $attribute cannot have a score lower than zero" } }
     }
 
     override fun attempt(challenge: DungeonsAndDragons.Challenge, dice: D20) = when (challenge) {
@@ -168,25 +202,18 @@ class DungeonsAndDragonsPlayerImplementation(private val strength: Int, private 
         return if (result >= challenge.difficultyClass) DungeonsAndDragons.Challenge.Outcome.Success else DungeonsAndDragons.Challenge.Outcome.Failure
     }
 
-    private fun DungeonsAndDragons.Attribute.modifier(): Int {
+    private fun Attribute.modifier(): Int {
 
-        val score = when (this) {
-            DungeonsAndDragons.Attribute.STRENGTH -> strength
-            DungeonsAndDragons.Attribute.DEXTERITY -> TODO("not implemented yet")
-            DungeonsAndDragons.Attribute.CONSTITUTION -> TODO("not implemented yet")
-            DungeonsAndDragons.Attribute.INTELLIGENCE -> TODO("not implemented yet")
-            DungeonsAndDragons.Attribute.WISDOM -> TODO("not implemented yet")
-            DungeonsAndDragons.Attribute.CHARISMA -> TODO("not implemented yet")
-        }
+        val score = attributes[this]!!
         val bonus = bonus()
         return (score + bonus).modifier()
     }
 
-    private fun DungeonsAndDragons.Attribute.bonus() = equipmentBonus()
+    private fun Attribute.bonus() = equipmentBonus()
 
-    private fun DungeonsAndDragons.Attribute.equipmentBonus() = equippedItems.sumOf { it.bonusToAttribute(this) }
+    private fun Attribute.equipmentBonus() = equippedItems.sumOf { it.bonusToAttribute(this) }
 
-    private fun DungeonsAndDragons.Wearable.bonusToAttribute(attribute: DungeonsAndDragons.Attribute): Int = when (this) {
+    private fun DungeonsAndDragons.Wearable.bonusToAttribute(attribute: Attribute): Int = when (this) {
         is DungeonsAndDragons.Wearable.AttributeEnhancing -> bonusToAttribute(attribute)
         else -> 0
     }
