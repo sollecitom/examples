@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import sollecitom.examples.exercises.rpg.DungeonsAndDragons.Attribute
+import sollecitom.examples.exercises.rpg.DungeonsAndDragons.Attribute.*
 import sollecitom.libs.swissknife.core.test.utils.testProvider
 import sollecitom.libs.swissknife.core.utils.CoreDataGenerator
 import sollecitom.libs.swissknife.test.utils.execution.utils.test
@@ -85,7 +86,7 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
 
         private fun DungeonsAndDragons.newKnockDoorDownChallenge(difficultyClass: Int = 10): DungeonsAndDragons.Challenge = newStrengthCheck(difficultyClass)
 
-        private fun DungeonsAndDragons.newStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = Attribute.STRENGTH)
+        private fun DungeonsAndDragons.newStrengthCheck(difficultyClass: Int): DungeonsAndDragons.Challenge = DungeonsAndDragons.AttributeChallenge(difficultyClass = difficultyClass, attribute = STRENGTH)
 
         private fun DungeonsAndDragons.newPlayer(
             strength: Int = 10,
@@ -140,14 +141,16 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
 
 class DungeonsAndDragonsAttributeEnhancingWearable(private val strength: Int = 0, private val dexterity: Int = 0, private val constitution: Int = 0, private val intelligence: Int = 0, private val wisdom: Int = 0, private val charisma: Int = 0) : DungeonsAndDragons.Wearable.AttributeEnhancing {
 
-    override fun bonusToAttribute(attribute: Attribute) = when (attribute) {
-        Attribute.STRENGTH -> strength
-        Attribute.DEXTERITY -> dexterity
-        Attribute.CONSTITUTION -> constitution
-        Attribute.INTELLIGENCE -> intelligence
-        Attribute.WISDOM -> wisdom
-        Attribute.CHARISMA -> charisma
-    }
+    private val bonuses = mapOf(
+        STRENGTH to strength,
+        DEXTERITY to dexterity,
+        CONSTITUTION to constitution,
+        INTELLIGENCE to intelligence,
+        WISDOM to wisdom,
+        CHARISMA to charisma,
+    )
+
+    override fun bonusToAttribute(attribute: Attribute) = bonuses[attribute]!!
 }
 
 interface D20 {
@@ -171,12 +174,12 @@ class DungeonsAndDragonsPlayerImplementation(
 ) : DungeonsAndDragons.Player {
 
     private val attributes = mapOf(
-        Attribute.STRENGTH to strength,
-        Attribute.DEXTERITY to dexterity,
-        Attribute.CONSTITUTION to constitution,
-        Attribute.INTELLIGENCE to intelligence,
-        Attribute.WISDOM to wisdom,
-        Attribute.CHARISMA to charisma
+        STRENGTH to strength,
+        DEXTERITY to dexterity,
+        CONSTITUTION to constitution,
+        INTELLIGENCE to intelligence,
+        WISDOM to wisdom,
+        CHARISMA to charisma
     )
 
     init {
