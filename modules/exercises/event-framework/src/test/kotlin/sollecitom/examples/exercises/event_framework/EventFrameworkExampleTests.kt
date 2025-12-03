@@ -17,11 +17,10 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
     fun `publishing events to an event stream for the same key`() = test {
 
         val events = eventFramework()
-        val streamReference = uniqueStreamReference<TestEvent>()
+        val stream = events.uniqueStream<TestEvent>()
         val accountId = "123"
         val event1 = TestEvent(accountId = accountId, value = "1")
         val event2 = TestEvent(accountId = accountId, value = "2")
-        val stream = events.streams[streamReference]
 
         val (event1Offset) = stream.forKey(accountId).append(event1)
         val (event2Offset) = stream.forKey(accountId).append(event2)
@@ -34,14 +33,13 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
     fun `publishing events to an event stream with different keys`() = test {
 
         val events = eventFramework()
-        val streamReference = uniqueStreamReference<TestEvent>()
+        val stream = events.uniqueStream<TestEvent>()
         val accountId1 = "123"
         val accountId2 = "234"
         val event1 = TestEvent(accountId = accountId1, value = "1")
         val event2 = TestEvent(accountId = accountId1, value = "2")
         val event3 = TestEvent(accountId = accountId2, value = "1")
         val event4 = TestEvent(accountId = accountId1, value = "3")
-        val stream = events.streams[streamReference]
 
         val (event1Offset) = stream.forKey(accountId1).append(event1)
         val (event2Offset) = stream.forKey(accountId1).append(event2)
@@ -60,6 +58,12 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
 
     private fun eventFramework(): EventFramework {
         return InMemoryEventFramework()
+    }
+
+    private inline fun <reified EVENT : Event> EventFramework.uniqueStream(): EventStream<EVENT> {
+
+        val reference = uniqueStreamReference<EVENT>()
+        return streams.withId(reference.id, reference.eventClass)
     }
 }
 
@@ -143,5 +147,3 @@ interface PublishedEvent {
 
     operator fun component1(): EventStream.Offset
 }
-
-operator fun <EVENT : Event> EventStreamOperations.get(reference: EventStream.Reference<EVENT>) = withId(reference.id, reference.eventClass)
