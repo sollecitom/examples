@@ -1,3 +1,7 @@
+plugins {
+    id("sollecitom.kotlin-library-conventions")
+}
+
 dependencies {
     testImplementation(libs.swissknife.ddd.domain)
     testImplementation(libs.swissknife.correlation.core.domain)
