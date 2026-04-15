@@ -22,9 +22,6 @@ plugins {
 
 rootProject.name = "examples"
 
-includeBuild("../swissknife")
-includeBuild("../pillar")
-
 fun module(vararg pathSegments: String) = subProject(rootFolder = "modules", pathSegments = pathSegments)
 
 fun subProject(rootFolder: String, vararg pathSegments: String, excludeRootFolderFromGroupName: Boolean = true) {
