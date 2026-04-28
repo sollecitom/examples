@@ -14,6 +14,9 @@ build:
 license-audit:
     bash ../scripts/run-license-audit.sh examples
 
+license-audit-compact:
+    bash ../scripts/run-license-audit.sh examples --compact
+
 generate-sbom:
     bash ../scripts/run-generate-sbom.sh examples
 
