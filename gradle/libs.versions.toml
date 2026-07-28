@@ -1,9 +1,9 @@
 [versions]
 # libraries
 kotlin = "2.4.10"
-sollecitom-gradle-plugins = "1.0.21"
-sollecitom-swissknife = "1.0.11"
-sollecitom-pillar = "1.0.3"
+sollecitom-gradle-plugins = "1.0.23"
+sollecitom-swissknife = "1.0.12"
+sollecitom-pillar = "1.0.4"
 # plugins
 palantir-git-plugin = "5.0.0"
 
