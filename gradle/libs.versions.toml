@@ -2,10 +2,10 @@
 # libraries
 kotlin = "2.4.10"
 sollecitom-gradle-plugins = "1.0.26"
-sollecitom-swissknife = "1.0.23"
-sollecitom-pillar = "1.0.6"
+sollecitom-swissknife = "1.0.24"
+sollecitom-pillar = "1.0.7"
 # plugins
-palantir-git-plugin = "5.0.0"
+palantir-git-plugin = "5.1.0"
 
 [libraries]
 sollecitom-gradle-plugins-base = { module = "sollecitom.gradle-plugins:base", version.ref = "sollecitom-gradle-plugins" }
