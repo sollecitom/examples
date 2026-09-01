@@ -30,7 +30,7 @@ import sollecitom.libs.swissknife.messaging.test.utils.message.matches
 import sollecitom.libs.swissknife.messaging.test.utils.message.outboundMessage
 import sollecitom.libs.swissknife.messaging.test.utils.topic.create
 import sollecitom.libs.swissknife.protected_value.domain.ProtectedValueFactory
-import sollecitom.libs.swissknife.protected_value.implementation.bouncy_castle.aes256WithCTR
+import sollecitom.libs.swissknife.protected_value.implementation.bouncy_castle.aes256WithGCM
 import sollecitom.libs.swissknife.pulsar.avro.serialization.asPulsarSchema
 import sollecitom.libs.swissknife.pulsar.messaging.adapter.ensureTopicExists
 import sollecitom.libs.swissknife.pulsar.messaging.adapter.newMessageConsumer
@@ -66,7 +66,7 @@ class PulsarMessagingTests : MessagingTestSpecification, CoreDataGenerator by Co
     private val pulsarAdmin by lazy { pulsar.admin() }
     override val timeout: Duration get() = 30.seconds
     private val key = newAesKey(variant = AES.Variant.AES_256)
-    private val factory = ProtectedValueFactory.aes256WithCTR { key }
+    private val factory = ProtectedValueFactory.aes256WithGCM { key }
 
     @BeforeAll
     fun beforeAll() = pulsar.start()
