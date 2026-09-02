@@ -1,7 +1,7 @@
 [versions]
 # libraries
 kotlin = "2.4.10"
-sollecitom-gradle-plugins = "1.0.26"
+sollecitom-gradle-plugins = "1.0.27"
 sollecitom-swissknife = "1.0.26"
 sollecitom-pillar = "1.0.8"
 # plugins
