@@ -47,6 +47,18 @@ private class RolePlayingGamesTests : CoreDataGenerator by CoreDataGenerator.tes
         }
 
         @Test
+        fun `a weak player fails to knock a door down`() = testWithGame(DungeonsAndDragons) {
+
+            val challenge = newKnockDoorDownChallenge(difficultyClass = 13)
+            val player = newPlayer(strength = 9)
+
+            val dice = loadedD20(result = 13)
+            val outcome = player.attempt(challenge, dice)
+
+            assertThat(outcome).failed()
+        }
+
+        @Test
         fun `a player critically succeeds in knocking a door down`() = testWithGame(DungeonsAndDragons) {
 
             val challenge = newKnockDoorDownChallenge(difficultyClass = 35)
@@ -220,7 +232,7 @@ class DungeonsAndDragonsPlayerImplementation(
         else -> 0
     }
 
-    private fun Int.modifier(): Int = (this - 10) / 2
+    private fun Int.modifier(): Int = (this - 10).floorDiv(2)
 }
 
 object DungeonsAndDragons {

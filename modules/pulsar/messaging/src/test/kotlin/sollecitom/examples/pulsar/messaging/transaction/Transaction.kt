@@ -42,10 +42,16 @@ sealed class Transaction(val id: Id, val amount: Double, val tag: String) {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
         other as Transaction
-        return id == other.id
+        return fields == other.fields
     }
 
     final override fun hashCode() = id.hashCode()
+
+    private val fields: List<Any>
+        get() = when (this) {
+            is CardTransaction -> listOf(id, amount, tag, cardNumber)
+            is TradeTransaction -> listOf(id, amount, tag, quantity, assetId, pricePerShare)
+        }
 
     override fun toString() = "Transaction(amount=$amount, tag=$tag, id=$id)"
 

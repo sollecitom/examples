@@ -7,7 +7,7 @@ Lightweight playground for testing and demonstrating technologies before spinnin
 
 | Dimension | Rating | Notes |
 |-----------|--------|-------|
-| Build system | A | Gradle 9.4.0, consistent conventions |
+| Build system | A | Gradle 9.8.0, consistent conventions |
 | Code quality | B | Exploratory but well-structured |
 | Test coverage | A- | 23 test files, project is primarily test-driven |
 | Documentation | B+ | Clear README with build instructions |
@@ -20,13 +20,9 @@ Lightweight playground for testing and demonstrating technologies before spinnin
 - Primarily test files (23 test files, 0 production files) — test-first exploration
 
 ## Issues
-- SNAPSHOT dependencies for all internal libraries
-- Configuration cache disabled
 - Only 2 modules — could demonstrate more patterns
-- No integration tests showing Pulsar end-to-end
 
 ## Potential Improvements
 1. Add more example modules showcasing different architectural patterns
-2. Add Pulsar integration tests (with Testcontainers)
-3. Document the event framework pattern with architecture diagrams
-4. Consider using this as a living cookbook/reference
+2. Document the event framework pattern with architecture diagrams
+3. Consider using this as a living cookbook/reference

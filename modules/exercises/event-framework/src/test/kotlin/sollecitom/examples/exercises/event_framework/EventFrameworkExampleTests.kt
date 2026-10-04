@@ -85,7 +85,7 @@ class InMemoryEventFramework : EventFramework {
         override fun <EVENT : Event> withId(id: String, eventClass: KClass<EVENT>): EventStream<EVENT> {
 
             val stream = streamsMap.getOrPut(id) { Stream(id, eventClass) } as Stream<EVENT>
-            if (stream.eventClass !== eventClass) {
+            if (stream.eventClass != eventClass) {
                 throw IllegalArgumentException("Stream with ID '$id' already exist, but its eventClass '${stream.eventClass}' is different from the one requested '$eventClass'")
             }
             return stream
