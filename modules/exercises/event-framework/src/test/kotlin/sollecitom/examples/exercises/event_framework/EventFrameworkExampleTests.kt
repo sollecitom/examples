@@ -7,14 +7,13 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import sollecitom.libs.swissknife.core.test.utils.testProvider
 import sollecitom.libs.swissknife.core.utils.CoreDataGenerator
-import sollecitom.libs.swissknife.test.utils.execution.utils.test
 import kotlin.reflect.KClass
 
 @TestInstance(PER_CLASS)
 private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerator.testProvider {
 
     @Test
-    fun `publishing events to an event stream for the same key`() = test {
+    suspend fun `publishing events to an event stream for the same key`() {
 
         val events = eventFramework()
         val stream = events.uniqueStream<TestEvent>()
@@ -30,7 +29,7 @@ private class EventFrameworkExampleTests : CoreDataGenerator by CoreDataGenerato
     }
 
     @Test
-    fun `publishing events to an event stream with different keys`() = test {
+    suspend fun `publishing events to an event stream with different keys`() {
 
         val events = eventFramework()
         val stream = events.uniqueStream<TestEvent>()
