@@ -34,7 +34,7 @@ private class TransactionEventAvroSerdeTests : AcmeAvroSerdeTestSpecification<Tr
 
     override fun parameterizedArguments() = listOf(
         "card auth was requested" to runBlocking { TransactionEvent(transaction = CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), id = newId.external(), amount = BigDecimal("9.95"), tag = "bills"), id = newId.external(), timestamp = clock.now(), context = Event.Context(invocation = InvocationContext.create(), parent = null, originating = null)) },
-        "card auth was processed" to runBlocking { TransactionEvent(transaction = CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("19.30"), "entertainment"), id = newId.external(), timestamp = clock.now(), context = Event.Context(invocation = InvocationContext.create(), parent = null, originating = null)) },
+        "card auth was processed" to runBlocking { TransactionEvent(transaction = CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("19.3"), "entertainment"), id = newId.external(), timestamp = clock.now(), context = Event.Context(invocation = InvocationContext.create(), parent = null, originating = null)) },
         "trade order was requested" to TransactionEvent(transaction = TradeOrderWasRequested(newId.external(), 200, "some-asset", BigDecimal("4.99"), "investment"), id = newId.external(), timestamp = clock.now(), context = Event.Context(invocation = InvocationContext.create(), parent = null, originating = null))
     )
 }

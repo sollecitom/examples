@@ -30,7 +30,7 @@ private class CardTransactionAvroRecordSerdeTest : AcmeAvroSerdeTestSpecificatio
     private val factory = ProtectedValueFactory.aes256WithGCM { key }
 
     override fun parameterizedArguments() = listOf(
-        "requested" to runBlocking { CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("23.80"), "food") },
+        "requested" to runBlocking { CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("23.8"), "food") },
         "processed" to runBlocking { CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("11.80"), "entertainment") },
     )
 }

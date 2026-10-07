@@ -30,8 +30,8 @@ class TransactionAvroSerdeTests : AcmeAvroSerdeTestSpecification<Transaction>, C
     private val factory = ProtectedValueFactory.aes256WithGCM { key }
 
     override fun parameterizedArguments() = listOf(
-        "card auth was requested" to runBlocking { CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("23.80"), "food") },
-        "card auth was processed" to runBlocking { CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("19.30"), "entertainment") },
+        "card auth was requested" to runBlocking { CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("23.8"), "food") },
+        "card auth was processed" to runBlocking { CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("19.3"), "entertainment") },
         "trade order was requested" to TradeOrderWasRequested(newId.external(), 200, "some-asset", BigDecimal("4.99"), "investment")
     )
 }

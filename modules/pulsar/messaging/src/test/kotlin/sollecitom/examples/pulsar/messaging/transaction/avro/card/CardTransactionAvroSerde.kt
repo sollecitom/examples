@@ -3,7 +3,7 @@ package sollecitom.examples.pulsar.messaging.transaction.avro.card
 import sollecitom.libs.swissknife.avro.serialization.utils.AvroSerde
 import sollecitom.libs.swissknife.avro.serialization.utils.buildRecord
 import sollecitom.libs.swissknife.avro.serialization.utils.deserializeWith
-import sollecitom.libs.swissknife.avro.serialization.utils.getRecordFromUnion
+import sollecitom.libs.swissknife.avro.serialization.utils.getEnvelope
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.CardTransaction
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.CardTransaction.CardAuthWasProcessed
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.CardTransaction.CardAuthWasRequested
@@ -21,10 +21,10 @@ private object CardTransactionAvroSerde : AvroSerde<CardTransaction> {
             is CardAuthWasRequested -> CardAuthWasRequested.avroSerde.serialize(value)
             is CardAuthWasProcessed -> CardAuthWasProcessed.avroSerde.serialize(value)
         }
-        setRecordInUnion(record)
+        setEnvelope(record)
     }
 
-    override fun deserialize(value: GenericRecord): CardTransaction = value.getRecordFromUnion { branchName, unionRecord ->
+    override fun deserialize(value: GenericRecord): CardTransaction = value.getEnvelope { branchName, unionRecord ->
         when (branchName) {
             Types.cardAuthWasRequested -> unionRecord.deserializeWith(CardAuthWasRequested.avroSerde)
             Types.cardAuthWasProcessed -> unionRecord.deserializeWith(CardAuthWasProcessed.avroSerde)

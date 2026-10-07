@@ -26,15 +26,15 @@ context(ids: UniqueIdGenerator, time: TimeGenerator)
 fun Transaction.asEvent(invocationContext: InvocationContext<*>, parentEvent: Event.Reference? = null, originatingEvent: Event.Reference? = null, id: Id = ids.newId.external(), timestamp: Instant = time.now()) = TransactionEvent(transaction = this, id = id, timestamp = timestamp, context = Event.Context(invocation = invocationContext, parent = parentEvent, originating = originatingEvent))
 
 context(random: RandomGenerator, ids: UniqueIdGenerator)
-fun cardAuthWasRequested(cardNumber: ProtectedString, tag: String = Name.random().value, amount: BigDecimal = random.randomMoneyAmount(maximumInMinorUnits = 100_000), id: Id = ids.newId.external()) = CardAuthWasRequested(cardNumber, id, amount, tag)
+fun cardAuthWasRequested(cardNumber: ProtectedString, tag: String = Name.random().value, amount: BigDecimal = random.randomMoneyAmount(untilInMinorUnits = 100_000), id: Id = ids.newId.external()) = CardAuthWasRequested(cardNumber, id, amount, tag)
 
 context(random: RandomGenerator, ids: UniqueIdGenerator)
-fun cardAuthWasProcessed(cardNumber: ProtectedString, tag: String = Name.random().value, amount: BigDecimal = random.randomMoneyAmount(maximumInMinorUnits = 100_000), id: Id = ids.newId.external()) = CardAuthWasProcessed(cardNumber, id, amount, tag)
+fun cardAuthWasProcessed(cardNumber: ProtectedString, tag: String = Name.random().value, amount: BigDecimal = random.randomMoneyAmount(untilInMinorUnits = 100_000), id: Id = ids.newId.external()) = CardAuthWasProcessed(cardNumber, id, amount, tag)
 
 context(random: RandomGenerator, ids: UniqueIdGenerator)
-fun tradeOrderWasRequested(assetId: String = Name.random().value, tag: String = Name.random().value, quantity: Int = random.nextInt(1..300), pricePerShare: BigDecimal = random.randomMoneyAmount(maximumInMinorUnits = 10_000), id: Id = ids.newId.external()) = TradeOrderWasRequested(id, quantity, assetId, pricePerShare, tag)
+fun tradeOrderWasRequested(assetId: String = Name.random().value, tag: String = Name.random().value, quantity: Int = random.nextInt(1..300), pricePerShare: BigDecimal = random.randomMoneyAmount(untilInMinorUnits = 10_000), id: Id = ids.newId.external()) = TradeOrderWasRequested(id, quantity, assetId, pricePerShare, tag)
 
-private fun RandomGenerator.randomMoneyAmount(maximumInMinorUnits: Long): BigDecimal = random.nextLong(10, maximumInMinorUnits).toBigDecimal().movePointLeft(2)
+private fun RandomGenerator.randomMoneyAmount(untilInMinorUnits: Long): BigDecimal = random.nextLong(10, untilInMinorUnits).toBigDecimal().movePointLeft(2)
 
 val TransactionEvent.Companion.messageConverter: MessageConverter<TransactionEvent> get() = TransactionEventMessageConverter
 

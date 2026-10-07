@@ -4,7 +4,9 @@ import sollecitom.libs.pillar.protected_value.domain.ProtectedString
 import sollecitom.libs.swissknife.core.domain.identity.Id
 import java.math.BigDecimal
 
-sealed class Transaction(val id: Id, val amount: BigDecimal, val tag: String) {
+sealed class Transaction(val id: Id, amount: BigDecimal, val tag: String) {
+
+    val amount: BigDecimal = amount.asMoney()
 
     sealed class CardTransaction(val cardNumber: ProtectedString, id: Id, amount: BigDecimal, tag: String) : Transaction(id, amount, tag) {
 
@@ -27,7 +29,9 @@ sealed class Transaction(val id: Id, val amount: BigDecimal, val tag: String) {
         companion object
     }
 
-    sealed class TradeTransaction(val quantity: Int, val assetId: String, val pricePerShare: BigDecimal, id: Id, tag: String) : Transaction(id, quantity.toBigDecimal().let(pricePerShare::multiply), tag) {
+    sealed class TradeTransaction(val quantity: Int, val assetId: String, pricePerShare: BigDecimal, id: Id, tag: String) : Transaction(id, pricePerShare * quantity.toBigDecimal(), tag) {
+
+        val pricePerShare: BigDecimal = pricePerShare.asMoney()
 
         class TradeOrderWasRequested(id: Id, quantity: Int, assetId: String, pricePerShare: BigDecimal, tag: String) : TradeTransaction(quantity, assetId, pricePerShare, id, tag) {
 
@@ -60,3 +64,5 @@ sealed class Transaction(val id: Id, val amount: BigDecimal, val tag: String) {
 }
 
 fun Transaction.CardTransaction.CardAuthWasRequested.andThenProcessed(): Transaction.CardTransaction.CardAuthWasProcessed = Transaction.CardTransaction.CardAuthWasProcessed(cardNumber = cardNumber, id = id, amount = amount, tag = tag)
+
+private fun BigDecimal.asMoney(): BigDecimal = setScale(2)

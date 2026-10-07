@@ -3,7 +3,7 @@ package sollecitom.examples.pulsar.messaging.transaction.avro.trade
 import sollecitom.libs.swissknife.avro.serialization.utils.AvroSerde
 import sollecitom.libs.swissknife.avro.serialization.utils.buildRecord
 import sollecitom.libs.swissknife.avro.serialization.utils.deserializeWith
-import sollecitom.libs.swissknife.avro.serialization.utils.getRecordFromUnion
+import sollecitom.libs.swissknife.avro.serialization.utils.getEnvelope
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.TradeTransaction
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.TradeTransaction.TradeOrderWasRequested
 import org.apache.avro.generic.GenericRecord
@@ -19,10 +19,10 @@ private object TradeTransactionAvroSerde : AvroSerde<TradeTransaction> {
         val record = when (value) {
             is TradeOrderWasRequested -> TradeOrderWasRequested.avroSerde.serialize(value)
         }
-        setRecordInUnion(record)
+        setEnvelope(record)
     }
 
-    override fun deserialize(value: GenericRecord): TradeTransaction = value.getRecordFromUnion { branchName, unionRecord ->
+    override fun deserialize(value: GenericRecord): TradeTransaction = value.getEnvelope { branchName, unionRecord ->
         when (branchName) {
             Types.tradeOrderWasRequested -> unionRecord.deserializeWith(TradeOrderWasRequested.avroSerde)
             else -> error("Unknown Trade Transaction type $branchName")

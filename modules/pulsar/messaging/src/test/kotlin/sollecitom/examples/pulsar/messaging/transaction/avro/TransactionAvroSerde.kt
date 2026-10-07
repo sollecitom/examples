@@ -3,7 +3,7 @@ package sollecitom.examples.pulsar.messaging.transaction.avro
 import sollecitom.libs.swissknife.avro.serialization.utils.AvroSerde
 import sollecitom.libs.swissknife.avro.serialization.utils.buildRecord
 import sollecitom.libs.swissknife.avro.serialization.utils.deserializeWith
-import sollecitom.libs.swissknife.avro.serialization.utils.getRecordFromUnion
+import sollecitom.libs.swissknife.avro.serialization.utils.getEnvelope
 import sollecitom.examples.pulsar.messaging.transaction.Transaction
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.CardTransaction
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.TradeTransaction
@@ -23,10 +23,10 @@ private object TransactionAvroSerde : AvroSerde<Transaction> {
             is CardTransaction -> CardTransaction.avroSerde.serialize(value)
             is TradeTransaction -> TradeTransaction.avroSerde.serialize(value)
         }
-        setRecordInUnion(record)
+        setEnvelope(record)
     }
 
-    override fun deserialize(value: GenericRecord) = value.getRecordFromUnion { branchName, unionRecord ->
+    override fun deserialize(value: GenericRecord) = value.getEnvelope { branchName, unionRecord ->
         when (branchName) {
             Types.cardTransaction -> unionRecord.deserializeWith(CardTransaction.avroSerde)
             Types.tradeTransaction -> unionRecord.deserializeWith(TradeTransaction.avroSerde)

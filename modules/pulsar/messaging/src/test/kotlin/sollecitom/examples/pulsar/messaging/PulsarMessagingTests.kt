@@ -32,7 +32,7 @@ import sollecitom.libs.swissknife.messaging.test.utils.topic.create
 import sollecitom.libs.swissknife.protected_value.domain.ProtectedValueFactory
 import sollecitom.libs.swissknife.protected_value.implementation.bouncy_castle.aes256WithGCM
 import sollecitom.libs.swissknife.pulsar.avro.serialization.asPulsarSchema
-import sollecitom.libs.swissknife.pulsar.messaging.adapter.ensureTopicExists
+import sollecitom.libs.swissknife.pulsar.utils.ensureTopicExists
 import sollecitom.libs.swissknife.pulsar.messaging.adapter.newMessageConsumer
 import sollecitom.libs.swissknife.pulsar.messaging.adapter.newMessageProducer
 import sollecitom.libs.swissknife.pulsar.messaging.adapter.topics
