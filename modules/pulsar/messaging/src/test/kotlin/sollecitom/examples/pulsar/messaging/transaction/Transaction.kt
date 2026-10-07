@@ -2,19 +2,20 @@ package sollecitom.examples.pulsar.messaging.transaction
 
 import sollecitom.libs.pillar.protected_value.domain.ProtectedString
 import sollecitom.libs.swissknife.core.domain.identity.Id
+import java.math.BigDecimal
 
-sealed class Transaction(val id: Id, val amount: Double, val tag: String) {
+sealed class Transaction(val id: Id, val amount: BigDecimal, val tag: String) {
 
-    sealed class CardTransaction(val cardNumber: ProtectedString, id: Id, amount: Double, tag: String) : Transaction(id, amount, tag) {
+    sealed class CardTransaction(val cardNumber: ProtectedString, id: Id, amount: BigDecimal, tag: String) : Transaction(id, amount, tag) {
 
-        class CardAuthWasRequested(cardNumber: ProtectedString, id: Id, amount: Double, tag: String) : CardTransaction(cardNumber, id, amount, tag) {
+        class CardAuthWasRequested(cardNumber: ProtectedString, id: Id, amount: BigDecimal, tag: String) : CardTransaction(cardNumber, id, amount, tag) {
 
             override fun toString() = "CardAuthWasRequested(cardNumber='$cardNumber', id=$id)"
 
             companion object
         }
 
-        class CardAuthWasProcessed(cardNumber: ProtectedString, id: Id, amount: Double, tag: String) : CardTransaction(cardNumber, id, amount, tag) {
+        class CardAuthWasProcessed(cardNumber: ProtectedString, id: Id, amount: BigDecimal, tag: String) : CardTransaction(cardNumber, id, amount, tag) {
 
             constructor(request: CardAuthWasRequested) : this(request.cardNumber, request.id, request.amount, request.tag)
 
@@ -26,9 +27,9 @@ sealed class Transaction(val id: Id, val amount: Double, val tag: String) {
         companion object
     }
 
-    sealed class TradeTransaction(val quantity: Int, val assetId: String, val pricePerShare: Double, id: Id, tag: String) : Transaction(id, pricePerShare * quantity, tag) {
+    sealed class TradeTransaction(val quantity: Int, val assetId: String, val pricePerShare: BigDecimal, id: Id, tag: String) : Transaction(id, quantity.toBigDecimal().let(pricePerShare::multiply), tag) {
 
-        class TradeOrderWasRequested(id: Id, quantity: Int, assetId: String, pricePerShare: Double, tag: String) : TradeTransaction(quantity, assetId, pricePerShare, id, tag) {
+        class TradeOrderWasRequested(id: Id, quantity: Int, assetId: String, pricePerShare: BigDecimal, tag: String) : TradeTransaction(quantity, assetId, pricePerShare, id, tag) {
 
             override fun toString() = "TradeOrderWasRequested(quantity=$quantity, assetId='$assetId', pricePerShare='$pricePerShare' id=$id)"
 

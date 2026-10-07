@@ -23,20 +23,15 @@ private object TransactionAvroSerde : AvroSerde<Transaction> {
             is CardTransaction -> CardTransaction.avroSerde.serialize(value)
             is TradeTransaction -> TradeTransaction.avroSerde.serialize(value)
         }
-        setRecordInUnion(value.type(), record)
+        setRecordInUnion(record)
     }
 
-    override fun deserialize(value: GenericRecord) = value.getRecordFromUnion { unionTypeName, unionRecord ->
-        when (unionTypeName) {
+    override fun deserialize(value: GenericRecord) = value.getRecordFromUnion { branchName, unionRecord ->
+        when (branchName) {
             Types.cardTransaction -> unionRecord.deserializeWith(CardTransaction.avroSerde)
             Types.tradeTransaction -> unionRecord.deserializeWith(TradeTransaction.avroSerde)
-            else -> error("Unknown Transaction type $unionTypeName")
+            else -> error("Unknown Transaction type $branchName")
         }
-    }
-
-    private fun Transaction.type(): String = when (this) {
-        is CardTransaction -> Types.cardTransaction
-        is TradeTransaction -> Types.tradeTransaction
     }
 
     private object Types {

@@ -1,6 +1,7 @@
 package sollecitom.examples.pulsar.messaging.transaction.avro.card
 
 import sollecitom.libs.pillar.avro.serialization.test.utils.AcmeAvroSerdeTestSpecification
+import java.math.BigDecimal
 import sollecitom.libs.swissknife.core.domain.text.Name
 import sollecitom.libs.swissknife.core.test.utils.testProvider
 import sollecitom.libs.swissknife.core.utils.CoreDataGenerator
@@ -29,7 +30,7 @@ private class CardTransactionAvroRecordSerdeTest : AcmeAvroSerdeTestSpecificatio
     private val factory = ProtectedValueFactory.aes256WithGCM { key }
 
     override fun parameterizedArguments() = listOf(
-        "requested" to runBlocking { CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), 23.8, "food") },
-        "processed" to runBlocking { CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), 11.8, "entertainment") },
+        "requested" to runBlocking { CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("23.80"), "food") },
+        "processed" to runBlocking { CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("11.80"), "entertainment") },
     )
 }

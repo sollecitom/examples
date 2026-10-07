@@ -9,7 +9,7 @@
     },
     {
       "name": "amount",
-      "type": "double"
+      "type": {"type": "bytes", "logicalType": "decimal", "precision": 100, "scale": 2}
     },
     {
       "name": "tag",

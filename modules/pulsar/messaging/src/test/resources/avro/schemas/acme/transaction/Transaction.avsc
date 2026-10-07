@@ -4,10 +4,6 @@
   "name": "Transaction",
   "fields": [
     {
-      "name": "envelope_type",
-      "type": "string"
-    },
-    {
       "name": "envelope",
       "type": [
         "acme.transaction.card.CardTransaction",

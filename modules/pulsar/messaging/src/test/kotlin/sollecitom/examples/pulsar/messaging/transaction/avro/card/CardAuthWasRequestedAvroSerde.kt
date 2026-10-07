@@ -3,7 +3,7 @@ package sollecitom.examples.pulsar.messaging.transaction.avro.card
 import sollecitom.libs.pillar.protected_value.messaging.serialization.avro.stringAvroSerde
 import sollecitom.libs.swissknife.avro.serialization.utils.AvroSerde
 import sollecitom.libs.swissknife.avro.serialization.utils.buildRecord
-import sollecitom.libs.swissknife.avro.serialization.utils.getDouble
+import sollecitom.libs.swissknife.avro.serialization.utils.getBigDecimal
 import sollecitom.libs.swissknife.avro.serialization.utils.getString
 import sollecitom.libs.swissknife.avro.serialization.utils.getValue
 import sollecitom.libs.swissknife.avro.serialization.utils.setValue
@@ -33,7 +33,7 @@ private object CardAuthWasRequestedAvroSerde : AvroSerde<CardAuthWasRequested> {
 
         val id = getValue(CardAuthWasRequestedAvroSerde.Fields.id, Id.avroSerde)
         val cardNumber = getValue(CardAuthWasRequestedAvroSerde.Fields.cardNumber, ProtectedValue.stringAvroSerde)
-        val amount = getDouble(CardAuthWasRequestedAvroSerde.Fields.amount)
+        val amount = getBigDecimal(CardAuthWasRequestedAvroSerde.Fields.amount)
         val tag = getString(CardAuthWasRequestedAvroSerde.Fields.tag)
         CardAuthWasRequested(cardNumber = cardNumber, id = id, amount = amount, tag = tag)
     }

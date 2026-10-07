@@ -1,6 +1,7 @@
 package sollecitom.examples.pulsar.messaging.transaction.avro
 
 import sollecitom.libs.pillar.avro.serialization.test.utils.AcmeAvroSerdeTestSpecification
+import java.math.BigDecimal
 import sollecitom.libs.swissknife.core.domain.text.Name
 import sollecitom.libs.swissknife.core.test.utils.testProvider
 import sollecitom.libs.swissknife.core.utils.CoreDataGenerator
@@ -29,8 +30,8 @@ class TransactionAvroSerdeTests : AcmeAvroSerdeTestSpecification<Transaction>, C
     private val factory = ProtectedValueFactory.aes256WithGCM { key }
 
     override fun parameterizedArguments() = listOf(
-        "card auth was requested" to runBlocking { CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), 23.8, "food") },
-        "card auth was processed" to runBlocking { CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), 19.3, "entertainment") },
-        "trade order was requested" to TradeOrderWasRequested(newId.external(), 200, "some-asset", 4.99, "investment")
+        "card auth was requested" to runBlocking { CardAuthWasRequested(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("23.80"), "food") },
+        "card auth was processed" to runBlocking { CardAuthWasProcessed(factory.protectValue(cardNumber, "card number".let(::Name), newId.external(), String::toByteArray), newId.external(), BigDecimal("19.30"), "entertainment") },
+        "trade order was requested" to TradeOrderWasRequested(newId.external(), 200, "some-asset", BigDecimal("4.99"), "investment")
     )
 }

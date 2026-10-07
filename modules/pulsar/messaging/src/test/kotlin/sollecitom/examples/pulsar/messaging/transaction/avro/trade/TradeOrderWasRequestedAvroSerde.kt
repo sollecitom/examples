@@ -2,7 +2,7 @@ package sollecitom.examples.pulsar.messaging.transaction.avro.trade
 
 import sollecitom.libs.swissknife.avro.serialization.utils.AvroSerde
 import sollecitom.libs.swissknife.avro.serialization.utils.buildRecord
-import sollecitom.libs.swissknife.avro.serialization.utils.getDouble
+import sollecitom.libs.swissknife.avro.serialization.utils.getBigDecimal
 import sollecitom.libs.swissknife.avro.serialization.utils.getInt
 import sollecitom.libs.swissknife.avro.serialization.utils.getString
 import sollecitom.libs.swissknife.avro.serialization.utils.getValue
@@ -33,7 +33,7 @@ private object TradeOrderWasRequestedAvroSerde : AvroSerde<TradeOrderWasRequeste
         val id = getValue(sollecitom.examples.pulsar.messaging.transaction.avro.trade.TradeOrderWasRequestedAvroSerde.Fields.id, Id.avroSerde)
         val quantity = getInt(sollecitom.examples.pulsar.messaging.transaction.avro.trade.TradeOrderWasRequestedAvroSerde.Fields.quantity)
         val assetId = getString(sollecitom.examples.pulsar.messaging.transaction.avro.trade.TradeOrderWasRequestedAvroSerde.Fields.assetId)
-        val pricePerShare = getDouble(sollecitom.examples.pulsar.messaging.transaction.avro.trade.TradeOrderWasRequestedAvroSerde.Fields.pricePerShare)
+        val pricePerShare = getBigDecimal(sollecitom.examples.pulsar.messaging.transaction.avro.trade.TradeOrderWasRequestedAvroSerde.Fields.pricePerShare)
         val tag = getString(sollecitom.examples.pulsar.messaging.transaction.avro.trade.TradeOrderWasRequestedAvroSerde.Fields.tag)
         TradeOrderWasRequested(id = id, quantity = quantity, assetId = assetId, pricePerShare = pricePerShare, tag = tag)
     }

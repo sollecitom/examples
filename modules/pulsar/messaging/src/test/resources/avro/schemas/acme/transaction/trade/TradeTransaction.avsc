@@ -4,10 +4,6 @@
   "name": "TradeTransaction",
   "fields": [
     {
-      "name": "envelope_type",
-      "type": "string"
-    },
-    {
       "name": "envelope",
       "type": [
         "TradeOrderWasRequested"

@@ -19,18 +19,14 @@ private object TradeTransactionAvroSerde : AvroSerde<TradeTransaction> {
         val record = when (value) {
             is TradeOrderWasRequested -> TradeOrderWasRequested.avroSerde.serialize(value)
         }
-        setRecordInUnion(value.type(), record)
+        setRecordInUnion(record)
     }
 
-    override fun deserialize(value: GenericRecord): TradeTransaction = value.getRecordFromUnion { unionTypeName, unionRecord ->
-        when (unionTypeName) {
+    override fun deserialize(value: GenericRecord): TradeTransaction = value.getRecordFromUnion { branchName, unionRecord ->
+        when (branchName) {
             Types.tradeOrderWasRequested -> unionRecord.deserializeWith(TradeOrderWasRequested.avroSerde)
-            else -> error("Unknown Trade Transaction type $unionTypeName")
+            else -> error("Unknown Trade Transaction type $branchName")
         }
-    }
-
-    private fun TradeTransaction.type(): String = when (this) {
-        is TradeOrderWasRequested -> Types.tradeOrderWasRequested
     }
 
     private object Types {

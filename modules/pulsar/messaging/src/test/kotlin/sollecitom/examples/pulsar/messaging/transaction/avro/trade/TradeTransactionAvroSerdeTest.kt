@@ -7,6 +7,7 @@ import sollecitom.examples.pulsar.messaging.transaction.Transaction.TradeTransac
 import sollecitom.examples.pulsar.messaging.transaction.Transaction.TradeTransaction.TradeOrderWasRequested
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import java.math.BigDecimal
 
 
 @TestInstance(PER_CLASS)
@@ -15,6 +16,6 @@ private class TradeTransactionAvroSerdeTest : AcmeAvroSerdeTestSpecification<Tra
     override val avroSerde = TradeTransaction.avroSerde
 
     override fun parameterizedArguments() = listOf(
-        "trade order was requested" to TradeOrderWasRequested(newId.external(), 200, "some-asset", 4.99, "investment")
+        "trade order was requested" to TradeOrderWasRequested(newId.external(), 200, "some-asset", BigDecimal("4.99"), "investment")
     )
 }

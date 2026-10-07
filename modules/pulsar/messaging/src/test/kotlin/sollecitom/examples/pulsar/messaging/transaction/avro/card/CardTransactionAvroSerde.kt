@@ -21,20 +21,15 @@ private object CardTransactionAvroSerde : AvroSerde<CardTransaction> {
             is CardAuthWasRequested -> CardAuthWasRequested.avroSerde.serialize(value)
             is CardAuthWasProcessed -> CardAuthWasProcessed.avroSerde.serialize(value)
         }
-        setRecordInUnion(value.type(), record)
+        setRecordInUnion(record)
     }
 
-    override fun deserialize(value: GenericRecord): CardTransaction = value.getRecordFromUnion { unionTypeName, unionRecord ->
-        when (unionTypeName) {
+    override fun deserialize(value: GenericRecord): CardTransaction = value.getRecordFromUnion { branchName, unionRecord ->
+        when (branchName) {
             Types.cardAuthWasRequested -> unionRecord.deserializeWith(CardAuthWasRequested.avroSerde)
             Types.cardAuthWasProcessed -> unionRecord.deserializeWith(CardAuthWasProcessed.avroSerde)
-            else -> error("Unknown Transaction type $unionTypeName")
+            else -> error("Unknown Transaction type $branchName")
         }
-    }
-
-    private fun CardTransaction.type(): String = when (this) {
-        is CardAuthWasRequested -> Types.cardAuthWasRequested
-        is CardAuthWasProcessed -> Types.cardAuthWasProcessed
     }
 
     private object Types {

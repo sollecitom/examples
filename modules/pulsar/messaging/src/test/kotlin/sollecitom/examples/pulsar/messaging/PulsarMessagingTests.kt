@@ -125,7 +125,7 @@ class PulsarMessagingTests : MessagingTestSpecification, CoreDataGenerator by Co
         assertThat(receivedMessages[2].value).isOriginating()
     }
 
-    override fun newTopic(tenant: Name, namespaceName: Name, namespace: Topic.Namespace?, name: Name, persistent: Boolean): Topic = Topic.create(persistent, tenant, namespaceName, namespace, name).also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
+    override fun newTopic(tenant: Name, namespaceName: Name, namespace: Topic.Namespace, name: Name, persistent: Boolean): Topic = Topic.of(persistent, namespace, name).also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
 
     override fun newMessageProducer(topic: Topic, name: String): MessageProducer<String> = pulsarClient.newMessageProducer(name.let(::Name), topic, pulsarClient.newProducer(Schema.STRING).enableBatching(false))
 
