@@ -127,13 +127,15 @@ class PulsarMessagingTests : MessagingTestSpecification, CoreDataGenerator by Co
 
     override fun newTopic(tenant: Name, namespaceName: Name, namespace: Topic.Namespace, name: Name, persistent: Boolean): Topic = Topic.of(persistent, namespace, name).also { pulsarAdmin.ensureTopicExists(topic = it, isAllowAutoUpdateSchema = true) }
 
-    override fun newMessageProducer(topic: Topic, name: String): MessageProducer<String> = pulsarClient.newMessageProducer(name.let(::Name), topic, pulsarClient.newProducer(Schema.STRING).enableBatching(false))
+    override fun newMessageProducer(topic: Topic, name: String): MessageProducer<String> = pulsarClient.newMessageProducer(name.let(::Name), topic, unbatchedProducer(Schema.STRING))
 
     override fun newMessageConsumer(topics: Set<Topic>, subscriptionName: String, name: String): MessageConsumer<String> = pulsarClient.newMessageConsumer(topics) { pulsarClient.newConsumer(Schema.STRING).topics(it).subscriptionName(subscriptionName).subscriptionInitialPosition(SubscriptionInitialPosition.Earliest).consumerName(name) }
 
-    private fun <VALUE : Any> newMessageProducer(serde: AvroSerde<VALUE>, topic: Topic, name: String = newId().stringValue): MessageProducer<VALUE> = pulsarClient.newMessageProducer(name.let(::Name), topic, pulsarClient.newProducer(serde.asPulsarSchema()).enableBatching(false))
+    private fun <VALUE : Any> newMessageProducer(serde: AvroSerde<VALUE>, topic: Topic, name: String = newId().stringValue): MessageProducer<VALUE> = pulsarClient.newMessageProducer(name.let(::Name), topic, unbatchedProducer(serde.asPulsarSchema()))
 
     private fun <VALUE : Any> newMessageConsumer(serde: AvroSerde<VALUE>, topics: Set<Topic>, subscriptionName: String = newId().stringValue, name: String = newId().stringValue): MessageConsumer<VALUE> = pulsarClient.newMessageConsumer(topics) { pulsarClient.newConsumer(serde.asPulsarSchema()).topics(it).subscriptionName(subscriptionName).subscriptionInitialPosition(SubscriptionInitialPosition.Earliest).consumerName(name) }
 
     private fun <VALUE : Any> newMessageConsumer(serde: AvroSerde<VALUE>, topic: Topic, subscriptionName: String = newId().stringValue, name: String = newId().stringValue): MessageConsumer<VALUE> = newMessageConsumer(serde, setOf(topic), subscriptionName, name)
+
+    private fun <VALUE> unbatchedProducer(schema: Schema<VALUE>) = pulsarClient.newProducer(schema).enableBatching(false)
 }
